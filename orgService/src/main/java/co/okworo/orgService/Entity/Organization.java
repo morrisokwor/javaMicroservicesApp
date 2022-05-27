@@ -1,16 +1,13 @@
 /**
  * 
  */
-package co.okworo.userService.Entity;
+package co.okworo.orgService.Entity;
 
-import java.time.LocalDate;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.Email;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,27 +18,21 @@ import lombok.NoArgsConstructor;
  *
  */
 @Entity
-@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Organization {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private String firstName;
+	@Column(unique=true)
+	private String name;
 
-	private String lastName;
+	@Column(unique=true)
+	private String code;
 
-	private String username;
-
-	@Email
-	private String email;
-
-	private LocalDate dateOfBirth;
-	
-	private Long organizationId;
+	private boolean isActive;
 
 }

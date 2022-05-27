@@ -3,33 +3,59 @@
  */
 package co.okworo.userService.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import co.okworo.userService.Dto.Organization;
+import co.okworo.userService.Dto.UserModel;
+import co.okworo.userService.Dto.UserOrganization;
 import co.okworo.userService.Entity.User;
-import co.okworo.userService.Payload.UserModel;
 import co.okworo.userService.Repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author Morris.Okworo
  *
  */
+@Service
+@RequiredArgsConstructor
 public class UserService {
 
-	@Autowired
-	UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	public User createUser(UserModel userModel) {
-		
+	private final RestTemplate restTemplate;
+
+	public User createUser(UserModel payload) {
+
 		User user = new User();
-		user.setDateOfBirth(userModel.getDateOfBirth());
-		user.setEmail(userModel.getEmail());
-		user.setFirstName(userModel.getFirstName());
-		user.setLastName(userModel.getLastName());
-		user.setUsername(userModel.getUsername());
-		
-		
+		user.setDateOfBirth(payload.getDateOfBirth());
+		user.setEmail(payload.getEmail());
+		user.setFirstName(payload.getFirstName());
+		user.setLastName(payload.getLastName());
+		user.setUsername(payload.getUsername());
+
 		return userRepository.save(user);
-		
+
+	}
+
+	public Iterable<User> getAllUsers() {
+		// TODO Auto-generated method stub
+		return userRepository.findAll();
+	}
+
+	public UserOrganization getUserWithOrganization(Long userId) {
+		// TODO Auto-generated method stub
+		User user = userRepository.findById(userId).get();
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>"+user.getOrganizationId());
+
+		Organization organization = restTemplate.getForObject("http://localhost:9090/org/"+user.getOrganizationId(),Organization.class);
+
+		UserOrganization userOrganization = new UserOrganization();
+		userOrganization.setUser(new UserModel(user.getId(), user.getFirstName(), user.getLastName(),
+				user.getUsername(), user.getEmail(), user.getDateOfBirth(), user.getOrganizationId()));
+		userOrganization.setOrganization(organization);
+
+		return userOrganization;
 	}
 
 }

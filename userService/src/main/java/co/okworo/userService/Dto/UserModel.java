@@ -1,7 +1,7 @@
 /**
  * 
  */
-package co.okworo.userService.Payload;
+package co.okworo.userService.Dto;
 
 import java.time.LocalDate;
 
@@ -32,8 +32,8 @@ public class UserModel {
 	@Email
 	private String email;
 
-	private String password;
-
 	private LocalDate dateOfBirth;
+	
+	private long organizationId;
 
 }
