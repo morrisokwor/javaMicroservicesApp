@@ -48,7 +48,7 @@ public class UserService {
 		User user = userRepository.findById(userId).get();
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>>"+user.getOrganizationId());
 
-		Organization organization = restTemplate.getForObject("http://localhost:9090/org/"+user.getOrganizationId(),Organization.class);
+		Organization organization = restTemplate.getForObject("http://ORGANIZATION-SERVICE/org/"+user.getOrganizationId(),Organization.class);
 
 		UserOrganization userOrganization = new UserOrganization();
 		userOrganization.setUser(new UserModel(user.getId(), user.getFirstName(), user.getLastName(),
